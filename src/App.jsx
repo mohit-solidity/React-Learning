@@ -1,17 +1,14 @@
 import { useState } from 'react'
-import Add from '../components/Add';
 import ConnectWallet from '../components/ButtonTest';
 import './App.css'
 
 
 function App() {
-
+  const [userAddress,setUserAddress] = useState("");
   return(
     <>
-      <p>Hello</p>
-      <Add name={"React"} />
-      <Add name={"Hardhat"} />
-      <ConnectWallet />
+      {!userAddress && <ConnectWallet onConnect={setUserAddress}/>}
+      {userAddress && <p>Wallet Is Connected After Showing And Address  : {userAddress}</p>}
     </>
   );
 }
