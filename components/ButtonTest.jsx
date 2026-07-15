@@ -1,8 +1,7 @@
-import {BrowserProvider} from "ethers";
+import {BrowserProvider, formatEther, parseEther} from "ethers";
 import { useState } from "react";
 
-export default function ConnectWallet({onConnect}){
-    const [useBalance, setUserBalance] = useState(0);
+export default function ConnectWallet({onConnect , balance}){
     async function Connect(){
         if(window.ethereum){
             try{
@@ -10,7 +9,8 @@ export default function ConnectWallet({onConnect}){
                 const provider = new BrowserProvider(window.ethereum);
                 const signer = await provider.getSigner();
                 const address = await signer.getAddress();
-                const balance = await provider.getBalance(address);
+                const userBalance = await provider.getBalance(address);
+                balance(formatEther(userBalance));
                 onConnect(address);
             }catch(err){
                 alert(`Error : ${err.message}`);
