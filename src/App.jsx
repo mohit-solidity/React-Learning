@@ -8,9 +8,10 @@ import UserMessages from '../components/MainC';
 
 function App() {
   const [userAddress,setUserAddress] = useState("");
+  const [readContract,setReadContract] = useState("");
   const [userBalance,setUserBalance] = useState(0);
   const [contract,setContract] = useState("");
-  const ca = "0x5b61fd589A9AF4459a35c8941d97F4d2db0A5be8";
+  const ca = "0xfAe290756cd5f1C780C75B1933AF0D4F8fB28Caa";
 
   async function ConnectUserWallet(provider){
     try{
@@ -18,7 +19,9 @@ function App() {
       const address = await signer.getAddress();
       const balance = await provider.getBalance(address);
       const con = new ethers.Contract(ca,abi,signer);
+      const readC = new ethers.Contract(ca,abi,provider);
       setContract(con);
+      setReadContract(readC);
       console.log(abi.length)
       console.log(`${abi}`);
       setUserAddress(address);
@@ -32,7 +35,6 @@ function App() {
       if(window.ethereum){
         const provider = new BrowserProvider(window.ethereum);
         const account = await provider.send("eth_accounts",[]);
-
         if(account.length>0){
           await ConnectUserWallet(provider);
         }
@@ -61,7 +63,7 @@ function App() {
   return (
     <>
       {!userAddress ? <ConnectWallet onConnect={setUserAddress} balance={setUserBalance} />:<Details address={userAddress} balance={userBalance} />}
-      {userAddress && <UserMessages contract={contract} address={userAddress} />
+      {userAddress && <UserMessages contract={contract} address={userAddress} readContract={readContract} />
       }
     </>
   );

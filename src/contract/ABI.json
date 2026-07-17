@@ -13,6 +13,25 @@
     "type": "function"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "_message",
+        "type": "string"
+      }
+    ],
+    "name": "MessapeSaved",
+    "type": "event"
+  },
+  {
     "inputs": [],
     "name": "removeMessage",
     "outputs": [],
