@@ -1,73 +1,68 @@
 import { useEffect, useState } from 'react'
-import { BrowserProvider, formatEther } from 'ethers';
+import { BrowserProvider, Contract, formatEther , ethers } from 'ethers';
 import ConnectWallet from '../components/ButtonTest';
 import Details from '../components/UserDetails';
-import './App.css'
+import './App.css';
+import abi from './contract/ABI.json';;
+import UserMessages from '../components/MainC';
 
 function App() {
-  const [userAddress, setUserAddress] = useState("");
-  const [userBalance, setUserBalance] = useState(0);
+  const [userAddress,setUserAddress] = useState("");
+  const [userBalance,setUserBalance] = useState(0);
+  const [contract,setContract] = useState("");
+  const ca = "0x5b61fd589A9AF4459a35c8941d97F4d2db0A5be8";
 
-  // 1. Core function to fetch and set wallet data
-  async function connectWalletLogic(provider) {
-    try {
+  async function ConnectUserWallet(provider){
+    try{
       const signer = await provider.getSigner();
       const address = await signer.getAddress();
-      const rawBalance = await provider.getBalance(address);
-      
+      const balance = await provider.getBalance(address);
+      const con = new ethers.Contract(ca,abi,signer);
+      setContract(con);
+      console.log(abi.length)
+      console.log(`${abi}`);
       setUserAddress(address);
-      setUserBalance(formatEther(rawBalance));
-    } catch (error) {
-      console.error("Error setting wallet data:", error);
+      setUserBalance(formatEther(balance));
+    }catch(err){
+      console.log(`Error : ${err.reason || err.message}`);
     }
   }
-
-  // 2. Check connection state silently on mount
-  useEffect(() => {
-    async function checkExistingConnection() {
-      if (window.ethereum) {
+  useState(()=>{
+    async function checkWalletConnection(){
+      if(window.ethereum){
         const provider = new BrowserProvider(window.ethereum);
-        
-        // eth_accounts checks silently without opening the MetaMask popup!
-        const accounts = await provider.send("eth_accounts", []);
-        
-        if (accounts.length > 0) {
-          console.log("Found an authorized account:", accounts[0]);
-          // Re-fetch the values to log the user right back in
-          await connectWalletLogic(provider);
+        const account = await provider.send("eth_accounts",[]);
+
+        if(account.length>0){
+          await ConnectUserWallet(provider);
         }
       }
     }
+    checkWalletConnection();
 
-    checkExistingConnection();
-
-    // 3. Listen for account changes (like logging out or switching accounts)
-    if (window.ethereum) {
-      window.ethereum.on("accountsChanged", (accounts) => {
-        if (accounts.length > 0) {
-          // If they swapped accounts, reload the provider data
+    if(window.ethereum){
+      window.ethereum.on("accountsChanged",(account)=>{
+        if(account.length>0){
           const provider = new BrowserProvider(window.ethereum);
-          connectWalletLogic(provider);
-        } else {
-          // If they disconnected completely, clear the state
+          ConnectUserWallet(provider);
+        }else{
           setUserAddress("");
           setUserBalance(0);
         }
-      });
+      })
     }
-
-    // Clean up event listener when component unmounts
-    return () => {
-      if (window.ethereum) {
-        window.ethereum.removeAllListeners("accountsChanged");
+    return()=>{
+      if(window.ethereum){
+        window.ethereum.removeAllListeners("accountsChanged")
       }
-    };
-  }, []);
+  }
+  },[])
 
   return (
     <>
-      {!userAddress && <ConnectWallet onConnect={setUserAddress} balance={setUserBalance} />}
-      {userAddress && <Details address={userAddress} balance={userBalance} />}
+      {!userAddress ? <ConnectWallet onConnect={setUserAddress} balance={setUserBalance} />:<Details address={userAddress} balance={userBalance} />}
+      {userAddress && <UserMessages contract={contract} address={userAddress} />
+      }
     </>
   );
 }

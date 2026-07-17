@@ -6,6 +6,7 @@ export default function Details({address , balance}){
         <>
             <p>user Address : {address}</p>
             <p>Balance : {balance} ETH</p>
+            <p>This Works Helloooooooooooo</p>
         </>
     )
 }
