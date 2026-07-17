@@ -21,11 +21,10 @@ export default function UserMessages({contract,address}){
         alert("Transaction Successful\nYour Message is Encraved")
     }
     return(
-        <>
-            <input type="text" onChange={(e)=>setNewMessge(e.target.value)} placeholder="Enter your Message" />
+        <div style={{border : '3px'}}>
+            <input type="text" onChange={(e)=>setNewMessge(e.target.value)} placeholder="Enter your Message" /><br/>
             <button onClick={writeMessage}>Crave Your Message</button>
-            <p>This Always Run</p>
             <p>User Message Encraved On Blockchain : {userMessage || "None"}</p>
-        </>
+        </div>
     )
 }
