@@ -13,6 +13,8 @@ function App() {
   const [contract,setContract] = useState("");
   const ca = "0xfAe290756cd5f1C780C75B1933AF0D4F8fB28Caa";
 
+
+  //This Function Is For Connecting Wallet
   async function ConnectUserWallet(provider){
     try{
       const signer = await provider.getSigner();
@@ -22,8 +24,6 @@ function App() {
       const readC = new ethers.Contract(ca,abi,provider);
       setContract(con);
       setReadContract(readC);
-      console.log(abi.length)
-      console.log(`${abi}`);
       setUserAddress(address);
       setUserBalance(formatEther(balance));
     }catch(err){
