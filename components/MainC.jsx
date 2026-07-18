@@ -24,6 +24,7 @@ export default function UserMessages({contract,address,readContract}){
             confirm("You Already Have Your Message Engraved.\nConfirm Changing?")
         }
         const tx = await contract.createMessage(newMessage);
+        alert("Transaction Processing. Please Wait!")
         await tx.wait();
         const msg = await contract.message(address);
         setuserMessage(msg);
@@ -33,10 +34,10 @@ export default function UserMessages({contract,address,readContract}){
         <div style={{border : '3px'}}>
             <input type="text" onChange={(e)=>setNewMessge(e.target.value)} placeholder="Enter your Message" /><br/>
             <button onClick={writeMessage}>Crave Your Message</button>
-            <p>User Message Encraved On Blockchain : {userMessage || "None"}</p>
+            <p>User Message Encraved On Blockchain : {userMessage || "None"}</p><br/><br/>
             <p>Past Messages : </p>
             {pastMessages.map((msg,index)=>(
-                <div key={index}>
+                <div key={index} style={{border:'2px' , padding:'3px' , color:"red"}}>
                     <p>Sender : {msg.user}</p>
                     <p>Message : {msg.message}</p>
                 </div>
