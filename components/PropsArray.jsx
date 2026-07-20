@@ -1,4 +1,4 @@
-export default function ReceiveArray({Array}){
+export default function ReceiveArray({Array , onToggleRead}){
     return(
         <div style={{border:"90px solid black" , borderRadius:'3px'}}>
             {Array.map((book)=>(
@@ -6,6 +6,7 @@ export default function ReceiveArray({Array}){
                     <p>Book : {book.title}</p>
                     <p>Written By : {book.author}</p>
                     <p>Readed : {book.isRead?"Yes":"No"}</p>
+                    <button onClick={()=>onToggleRead(book.id)}>{book.isRead?"Mark As Un Read":"Mark As Read"}</button>
                 </div>
             ))}
         </div>
