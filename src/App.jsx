@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import ReceiveProps from '../components/Test';
 import ReceiveArray from '../components/PropsArray';
+import ReceiveList from '../components/List';
 
 function App() {
   const arr = ["Mohit","Rohit","Ritika","Gourav","Ankit"]
@@ -12,11 +13,16 @@ function App() {
     { id: 5, title: "Snow Crash", author: "Neal Stephenson", isRead: false },
     {id:30, title:"Pirate Of THe Kingdom" , author:"Spido", isRead:true}
   ]);
+  const [users,setUsers] = useState([
+    { id: "u1", name: "Alice", role: "Admin" },
+    { id: "u2", name: "Bob", role: "User" },
+    { id: "u3", name: "Charlie", role: "Moderator" }
+  ]);
 
   const toggleRead = (id) =>{
     setBooksData(booksData=>
       booksData.map((book)=>
-      book.id === id?{...book, isRead: !book.isRead}:book
+        book.id===id?{...book , isRead:!book.isRead}:book
       )
     )
   }
@@ -24,6 +30,7 @@ function App() {
   return(
     <div>
       <ReceiveArray Array={booksData} onToggleRead = {toggleRead}/>
+      <ReceiveList listElements={users} />
     </div>
   )
 }
