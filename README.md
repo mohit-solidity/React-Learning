@@ -1,16 +1,64 @@
-# React + Vite
+# React Learning
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A personal **React.js learning repository** containing experiments, examples, and practice projects created while learning React.
 
-Currently, two official plugins are available:
+The project is built with **React and Vite** and is focused on understanding React fundamentals through hands-on coding.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Topics Covered
 
-## React Compiler
+* React components
+* JSX
+* Props
+* State management
+* `useState`
+* `useEffect`
+* Event handling
+* Forms and inputs
+* Conditional rendering
+* Component composition
+* Reusable components
+* React project structure
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the Oxlint configuration
+* React
+* JavaScript
+* Vite
+* CSS
+* ESLint / Oxlint
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Project Structure
+
+```text
+React-Learning/
+├── components/
+├── public/
+├── src/
+├── index.html
+├── package.json
+├── vite.config.js
+└── README.md
+```
+
+## Getting Started
+
+```bash
+git clone https://github.com/mohit-solidity/React-Learning.git
+cd React-Learning
+npm install
+npm run dev
+```
+
+Open the local URL shown by Vite in your browser.
+
+## Purpose
+
+This repository is mainly used to **learn React by building and experimenting with code**, rather than following a single production application.
+
+## Author
+
+**Mohit Sharma**
+
+Blockchain Developer | Solidity • React.js • Ethers.js
+
+GitHub: https://github.com/mohit-solidity
