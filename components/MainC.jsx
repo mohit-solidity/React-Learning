@@ -10,7 +10,7 @@ export default function UserMessages({contract,address,readContract}){
             const message = await contract.seeMessage(address);
             setuserMessage(message);
             const filter = readContract.filters.MessapeSaved();
-            const readBlock = 11295000;
+            const readBlock = 11298000;
             const events = await readContract.queryFilter(filter,readBlock,"latest");
             const formattedData  = events.map((event)=>({
                 user: event.args._user,
