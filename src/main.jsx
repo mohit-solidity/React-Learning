@@ -18,7 +18,7 @@ import {
 
 import { config } from './config';
 
-import App from './App.jsx';
+import App from './App.tsx';
 
 const queryClient = new QueryClient();
 
