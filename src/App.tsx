@@ -1,6 +1,7 @@
 import { useAccount } from 'wagmi';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Test from '../components/Test';
+import "./App.css"
 
 function App(){
   const {address, chainId, isConnected, chain} = useAccount();
