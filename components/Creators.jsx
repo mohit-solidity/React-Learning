@@ -45,9 +45,9 @@ export default function Creator() {
   };
 
   const removeCreator = (id) => {
-    setCreators((creatorLsit) =>
-      creatorLsit.filter((creator)=>creator.id!==id)
-    )
+    setCreators((currentCreators) =>
+      currentCreators.filter((creator) => creator.id !== id)
+    );
   };
 
   const rankCreators = () => {
@@ -61,9 +61,20 @@ export default function Creator() {
   const searchCreator = (
     creators.filter((users)=>users.name.toLowerCase().includes(searchedName.toLowerCase()))
   )
+  const subscribedTo = (
+     creators.filter((creator)=>(creator.subscribed)).length
+  )
+  const totalSubscribers = (
+    creators.reduce(
+      (total,creators) =>total + creators.subscribers,0
+    )
+  )
 
   return(
     <>
+      <p>Total Creators : {creators.length} </p>
+      <p>Total Subscribers : {totalSubscribers} Subscribers</p>
+      <p>Subscribed To :  {subscribedTo} Channels</p>
       <h1>Creators</h1>
       <button type="button" onClick={rankCreators}>
         Rank by subscribers
