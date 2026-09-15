@@ -9,6 +9,7 @@ const initialCreators = [
 export default function Creator() {
   const [creators, setCreators] = useState(initialCreators);
   const [name, setName] = useState("");
+  const [searchedName, setSearchedName] = useState("");
 
   const toggleSubscription = (id)=> {
     setCreators((currentCreators)=>
@@ -44,16 +45,32 @@ export default function Creator() {
   };
 
   const removeCreator = (id) => {
+    setCreators((creatorLsit) =>
+      creatorLsit.filter((creator)=>creator.id!==id)
+    )
+  };
+
+  const rankCreators = () => {
     setCreators((currentCreators) =>
-      currentCreators.filter((creator) => creator.id !== id)
+      [...currentCreators].sort(
+        (a, b) => b.subscribers - a.subscribers
+      )
     );
   };
+
+  const searchCreator = (
+    creators.filter((users)=>users.name.toLowerCase().includes(searchedName.toLowerCase()))
+  )
+
   return(
     <>
-      <p>Hello</p>
-      <p>creator</p>
+      <h1>Creators</h1>
+      <button type="button" onClick={rankCreators}>
+        Rank by subscribers
+      </button>
+      <input type='text' value={searchedName} onChange={(e)=>setSearchedName(e.target.value)} placeholder='Search Creator' />
       {
-        creators.map((creator)=>(
+        searchCreator.map((creator)=>(
           <div
             key={creator.id}
             style={{
@@ -71,7 +88,9 @@ export default function Creator() {
             >
               {creator.subscribed ? 'Unsubscribe' : 'Subscribe'}
             </button>
-            <button onClick={()=>removeCreator(creator.id)}>Delete Creator</button>
+            <button type="button" onClick={() => removeCreator(creator.id)}>
+              Delete Creator
+            </button>
           </div>
         ))
       }
