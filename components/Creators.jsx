@@ -1,15 +1,16 @@
 import { useState } from 'react';
 
 const initialCreators = [
-  { id: 1, name: 'Alex', subscribers: 120, subscribed: false },
-  { id: 2, name: 'John', subscribers: 450, subscribed: false },
-  { id: 3, name: 'Sarah', subscribers: 80, subscribed: false },
+  { id: 1, name: 'Live Insaan', subscribers: 12066, subscribed: false },
+  { id: 2, name: 'Carry Minati', subscribers: 4503, subscribed: false },
+  { id: 3, name: 'Casetoo Is Live', subscribers: 80890, subscribed: false },
 ];
 
 export default function Creator() {
   const [creators, setCreators] = useState(initialCreators);
   const [name, setName] = useState("");
   const [searchedName, setSearchedName] = useState("");
+  const [minimumNumbersToSearch, setMinimumNumbersToSearch] = useState(0);
 
   const toggleSubscription = (id)=> {
     setCreators((currentCreators)=>
@@ -58,16 +59,22 @@ export default function Creator() {
     );
   };
 
-  const searchCreator = (
-    creators.filter((users)=>users.name.toLowerCase().includes(searchedName.toLowerCase()))
-  )
-  const subscribedTo = (
-     creators.filter((creator)=>(creator.subscribed)).length
-  )
+  const searchCreator = creators.filter((creator) => {
+    const matchesName = creator.name
+      .toLowerCase()
+      .includes(searchedName.toLowerCase());
+    const matchesMinimumSubscribers =
+      creator.subscribers >= Number(minimumNumbersToSearch);
+
+    return matchesName && matchesMinimumSubscribers;
+  });
   const totalSubscribers = (
     creators.reduce(
-      (total,creators) =>total + creators.subscribers,0
+      (total,creators)=>total + creators.subscribers,0
     )
+  )
+  const subscribedTo = (
+    creators.filter((creator)=>creator.subscribed).length
   )
 
   return(
@@ -78,8 +85,11 @@ export default function Creator() {
       <h1>Creators</h1>
       <button type="button" onClick={rankCreators}>
         Rank by subscribers
-      </button>
-      <input type='text' value={searchedName} onChange={(e)=>setSearchedName(e.target.value)} placeholder='Search Creator' />
+      </button><br/><br/>
+      <label>Search Creator : </label>
+      <input type='text' value={searchedName} onChange={(e)=>setSearchedName(e.target.value)} placeholder='Ex: Mohit' /><br/><br/>
+      <label>Search By Minimum Subscribers : </label>
+      <input type='number' onChange={(e)=>setMinimumNumbersToSearch(e.target.value)} placeholder='Ex: 300' />
       {
         searchCreator.map((creator)=>(
           <div
@@ -90,7 +100,7 @@ export default function Creator() {
               padding: '3px',
             }}
           >
-            <p>Name : {creator.name}</p>
+            <h2>Name : {creator.name}</h2>
             <p>{creator.subscribers} Subscribers</p>
             <button
               type="button"
