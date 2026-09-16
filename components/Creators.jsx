@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
 const initialCreators = [
-  { id: 1, name: 'Live Insaan', subscribers: 12066, subscribed: false },
-  { id: 2, name: 'Carry Minati', subscribers: 4503, subscribed: false },
+  { id: 1, name: 'Live Insaan', subscribers: 45003, subscribed: false },
+  { id: 2, name: 'Carry Minati', subscribers: 45003, subscribed: false },
   { id: 3, name: 'Casetoo Is Live', subscribers: 80890, subscribed: false },
 ];
 
@@ -11,6 +11,7 @@ export default function Creator() {
   const [name, setName] = useState("");
   const [searchedName, setSearchedName] = useState("");
   const [minimumNumbersToSearch, setMinimumNumbersToSearch] = useState(0);
+  const [ranked, setRanked] = useState(false);
 
   const toggleSubscription = (id)=> {
     setCreators((currentCreators)=>
@@ -57,7 +58,15 @@ export default function Creator() {
         (a, b) => b.subscribers - a.subscribers
       )
     );
+    setRanked(true);
   };
+  const resetRank = ()=> {
+    setCreators((creator)=>
+      [...creator].sort(
+        (a,b)=>a.id - b.id)
+    )
+    setRanked(false);
+  }
 
   const searchCreator = creators.filter((creator) => {
     const matchesName = creator.name
@@ -83,9 +92,10 @@ export default function Creator() {
       <p>Total Subscribers : {totalSubscribers} Subscribers</p>
       <p>Subscribed To :  {subscribedTo} Channels</p>
       <h1>Creators</h1>
-      <button type="button" onClick={rankCreators}>
+      <button type="button" disabled={ranked} onClick={rankCreators}>
         Rank by subscribers
-      </button><br/><br/>
+      </button>
+      <button onClick={resetRank} disabled={!ranked}>Reset Filter</button><br/><br/>
       <label>Search Creator : </label>
       <input type='text' value={searchedName} onChange={(e)=>setSearchedName(e.target.value)} placeholder='Ex: Mohit' /><br/><br/>
       <label>Search By Minimum Subscribers : </label>
