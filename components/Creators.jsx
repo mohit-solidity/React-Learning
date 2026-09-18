@@ -34,6 +34,18 @@ export default function Creator() {
       }),
     );
   };
+  const toggleCreatorVerified = (id)=>{
+    setCreators((creators)=>
+    creators.map((creator)=>{
+      if(creator.id!==id) return creator;
+      const toggleverified = !creator.verified;
+      return{
+        ...creator,
+        toggleverified,
+        verified: toggleverified
+      }
+    }))
+  }
 
   const addCreator = (event) => {
     event.preventDefault();
@@ -143,7 +155,7 @@ export default function Creator() {
               padding: '3px',
             }}
           >
-            <h2>Name : {creator.name} {creator.verified?"✅":""}</h2>
+            <h2>Name : {creator.name} {creator.verified?<><>✅</><button onClick={()=>toggleCreatorVerified(creator.id)}>mark Unverified</button></>:<button onClick={()=>toggleCreatorVerified(creator.id)}>Mark Verified</button>}</h2>
             <p>{creator.subscribers} Subscribers</p>
             <button
               type="button"
