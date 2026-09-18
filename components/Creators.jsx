@@ -1,9 +1,11 @@
 import { useState } from 'react';
 
 const initialCreators = [
-  { id: 1, name: 'Live Insaan', subscribers: 45003, subscribed: false },
-  { id: 2, name: 'Carry Minati', subscribers: 45003, subscribed: false },
-  { id: 3, name: 'Casetoo Is Live', subscribers: 80890, subscribed: false },
+  { id: 1, name: "Alex", subscribers: 12000, verified: true },
+  { id: 2, name: "John", subscribers: 4500, verified: false },
+  { id: 3, name: "Sarah", subscribers: 800, verified: true },
+  { id: 4, name: "Mike", subscribers: 300, verified: true },
+  { id: 5, name: "David", subscribers: 500, verified: false }
 ];
 
 export default function Creator() {
@@ -12,6 +14,11 @@ export default function Creator() {
   const [searchedName, setSearchedName] = useState("");
   const [minimumNumbersToSearch, setMinimumNumbersToSearch] = useState(0);
   const [ranked, setRanked] = useState(false);
+  const [showVerified, setShowVerified] = useState(false);
+  const toggleShow = ()=> {
+    const toggle = !showVerified;
+    setShowVerified(toggle);
+  }
 
   const toggleSubscription = (id)=> {
     setCreators((currentCreators)=>
@@ -99,9 +106,10 @@ export default function Creator() {
       <label>Search Creator : </label>
       <input type='text' value={searchedName} onChange={(e)=>setSearchedName(e.target.value)} placeholder='Ex: Mohit' /><br/><br/>
       <label>Search By Minimum Subscribers : </label>
-      <input type='number' onChange={(e)=>setMinimumNumbersToSearch(e.target.value)} placeholder='Ex: 300' />
+      <input type='number' onChange={(e)=>setMinimumNumbersToSearch(e.target.value)} placeholder='Ex: 300' /><br/>
+      <button onClick={()=>toggleShow()}>{showVerified?"Show All Creators":"Show Verified Creators"}</button>
       {
-        searchCreator.map((creator)=>(
+        showVerified&&searchCreator.filter((creator)=>creator.verified).map((creator)=>(
           <div
             key={creator.id}
             style={{
@@ -110,7 +118,32 @@ export default function Creator() {
               padding: '3px',
             }}
           >
-            <h2>Name : {creator.name}</h2>
+            <h2>Name : {creator.name} {creator.verified?"✅":""}</h2>
+            <p>{creator.subscribers} Subscribers</p>
+            <button
+              type="button"
+              style={{ color: creator.subscribed ? 'red' : 'green' }}
+              onClick={() => toggleSubscription(creator.id)}
+            >
+              {creator.subscribed ? 'Unsubscribe' : 'Subscribe'}
+            </button>
+            <button type="button" onClick={() => removeCreator(creator.id)}>
+              Delete Creator
+            </button>
+          </div>
+        ))
+      }
+      {
+        !showVerified&&searchCreator.map((creator)=>(
+          <div
+            key={creator.id}
+            style={{
+              border: '2px solid blue',
+              margin: '3px',
+              padding: '3px',
+            }}
+          >
+            <h2>Name : {creator.name} {creator.verified?"✅":""}</h2>
             <p>{creator.subscribers} Subscribers</p>
             <button
               type="button"
