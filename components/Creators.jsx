@@ -1,20 +1,27 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import creators from './CreatorsList.json';;
 
-const initialCreators = [
-  { id: 1, name: "Alex", subscribers: 12000, verified: true },
-  { id: 2, name: "John", subscribers: 4500, verified: false },
-  { id: 3, name: "Sarah", subscribers: 800, verified: true },
-  { id: 4, name: "Mike", subscribers: 300, verified: true },
-  { id: 5, name: "David", subscribers: 500, verified: false }
-];
+const initialCreators = creators;
 
 export default function Creator() {
-  const [creators, setCreators] = useState(initialCreators);
+  const [creators, setCreators] = useState(()=>{
+    const savedCreators = localStorage.getItem("creators")
+    if(savedCreators){
+      return JSON.parse(savedCreators);
+    }
+    return initialCreators;
+  });
   const [name, setName] = useState("");
   const [searchedName, setSearchedName] = useState("");
   const [minimumNumbersToSearch, setMinimumNumbersToSearch] = useState(0);
   const [ranked, setRanked] = useState(false);
   const [showVerified, setShowVerified] = useState(false);
+  const [showSubscribedOnly, setShowSubscribedOnly] = useState(false);
+
+  useEffect(()=>{
+    localStorage.setItem("creators",JSON.stringify(creators))
+  },[creators])
+
   const toggleShow = ()=> {
     const toggle = !showVerified;
     setShowVerified(toggle);
@@ -104,6 +111,12 @@ export default function Creator() {
   const subscribedTo = (
     creators.filter((creator)=>creator.subscribed).length
   )
+  const toggleSubscribed = ()=> {
+    setShowSubscribedOnly(!showSubscribedOnly);
+  }
+  const showSubscribed = searchCreator.filter((creator)=>
+    showSubscribedOnly?creator.subscribed: true
+  )
 
   return(
     <>
@@ -120,8 +133,9 @@ export default function Creator() {
       <label>Search By Minimum Subscribers : </label>
       <input type='number' onChange={(e)=>setMinimumNumbersToSearch(e.target.value)} placeholder='Ex: 300' /><br/>
       <button onClick={()=>toggleShow()}>{showVerified?"Show All Creators":"Show Verified Creators"}</button>
+      <button onClick={()=>toggleSubscribed()}>{showSubscribedOnly?"Show All Channels":"Show Subsribed Channels"}</button>
       {
-        showVerified&&searchCreator.filter((creator)=>creator.verified).map((creator)=>(
+        showVerified&&showSubscribed.filter((creator)=>creator.verified).map((creator)=>(
           <div
             key={creator.id}
             style={{
@@ -130,7 +144,7 @@ export default function Creator() {
               padding: '3px',
             }}
           >
-            <h2>Name : {creator.name} {creator.verified?"✅":""}</h2>
+            <h2>Name : {creator.name} {creator.verified?<><>✅</><button onClick={()=>toggleCreatorVerified(creator.id)}>mark Unverified</button></>:<button onClick={()=>toggleCreatorVerified(creator.id)}>Mark Verified</button>}</h2>
             <p>{creator.subscribers} Subscribers</p>
             <button
               type="button"
@@ -146,7 +160,7 @@ export default function Creator() {
         ))
       }
       {
-        !showVerified&&searchCreator.map((creator)=>(
+        !showVerified&&showSubscribed.map((creator)=>(
           <div
             key={creator.id}
             style={{
