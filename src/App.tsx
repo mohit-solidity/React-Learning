@@ -9,14 +9,14 @@ function App(){
   return(
     <>
       <h1>Hey Guys</h1>
+      <ConnectButton label="Sign In To Get Started" showBalance={false} />
+      <CreatorsData />
       {isConnected&&(
         <>
           <p>Address : {address}</p>
           <p>Chain Id : {chainId}</p>
           <p>Chain Name : {chain?.name}</p>
           <Test name={"Mohit"} />
-          <ConnectButton label="Sign In To Get Started" showBalance={false} />
-          <CreatorsData />
         </>
       )}
     </>
