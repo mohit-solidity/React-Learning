@@ -6,7 +6,7 @@ import CreatorsData from '../components/Creators';
 import { formatUnits, parseUnits } from 'viem';
 
 function App(){
-  const valuew = BigInt(15774647887323943);
+  const valuew = BigInt(Number(59335362760018));
   const toNumber = formatUnits((  valuew),18);
   const parse = parseUnits(toNumber,18);
   const {address, chainId, isConnected, chain} = useAccount();

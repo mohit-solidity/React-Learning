@@ -1,20 +1,52 @@
-import fs from "fs";
+import express, { json } from "express";
 
-async function getData(){
-    console.log(`This Is Starting of Function A`);
+const app = express();
 
-    const data =await fs.readFile("Hello.txt", ()=>{
-        console.log(`Data : ${data}`);
-        
-        console.log(`This Done`);
-        
+app.use(json());
+
+const users = [];
+
+app.get("/", (req, res) => {
+    res.send("Server is running. Here");
+});
+
+app.post("/register", (req, res) => {
+    console.log(`Regiuster Is Running`)
+    const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+        return res.status(400).json({
+            message: "All fields are required"
+        });
+    }
+
+    const existingUser = users.find(user => user.email === email);
+
+    if (existingUser) {
+        return res.status(409).json({
+            message: "User already exists"
+        });
+    }
+
+    const user = {
+        id: users.length + 1,
+        name,
+        email,
+        password
+    };
+
+    users.push(user);
+
+    res.status(201).json({
+        message: "User registered",
+        user
     });
-    console.log(`Data : ${data}`);
-    
-    console.log(`This Is Ending Of B`);
-    
-}
+});
 
-console.log(`A`);
-getData();
-console.log(`B`);
+app.get("/users", (req, res) => {
+    res.json(users);
+});
+
+app.listen(3000, () => {
+    console.log("Server running on port 3000");
+});
