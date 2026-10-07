@@ -1,52 +1,28 @@
-import express, { json } from "express";
+import http from "http";
+import path from "path"
+import fs from "fs"
 
-const app = express();
 
-app.use(json());
-
-const users = [];
-
-app.get("/", (req, res) => {
-    res.send("Server is running. Here");
-});
-
-app.post("/register", (req, res) => {
-    console.log(`Regiuster Is Running`)
-    const { name, email, password } = req.body;
-
-    if (!name || !email || !password) {
-        return res.status(400).json({
-            message: "All fields are required"
-        });
+const server = http.createServer((req,res)=>{
+    if(req.url==="/"){
+        res.end(`Home Page`)
+        return
     }
-
-    const existingUser = users.find(user => user.email === email);
-
-    if (existingUser) {
-        return res.status(409).json({
-            message: "User already exists"
-        });
+    if(req.url==="/data"){
+        fs.readFile("Hello.txt","utf-8",(errr,data)=>{
+            if(errr){
+                res.end(`Error : ${errr}`);
+                return
+            }
+            res.end(`Data : ${data}`)
+        })
+        return
     }
-
-    const user = {
-        id: users.length + 1,
-        name,
-        email,
-        password
-    };
-
-    users.push(user);
-
-    res.status(201).json({
-        message: "User registered",
-        user
-    });
-});
-
-app.get("/users", (req, res) => {
-    res.json(users);
-});
-
-app.listen(3000, () => {
-    console.log("Server running on port 3000");
-});
+    if(req.url==="/mohit"){
+        res.end(`Mohit's Page`)
+        return
+    }
+    res.statusCode = 404;
+    res.end(`Error`)
+})
+server.listen(3000)
