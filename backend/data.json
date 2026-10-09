@@ -1,0 +1,12 @@
+[
+    {
+        "id": 1,
+        "name": "Laptop",
+        "age":20
+    },
+    {
+        "id": 2,
+        "name": "Phone",
+        "age": 30
+    }
+]

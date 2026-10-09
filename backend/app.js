@@ -1,28 +1,30 @@
 import http from "http";
-import path from "path"
-import fs from "fs"
-
+import data from "./data.json" with {type: "json"};
 
 const server = http.createServer((req,res)=>{
     if(req.url==="/"){
-        res.end(`Home Page`)
+        res.end(`Home Page`);
+        return;
+    }
+    if(req.url==="/users" && req.method==="GET"){
+        res.setHeader("content-type","application/json")
+        res.statusCode = 200;
+        res.end(`Data : ${JSON.stringify(data)}`)
         return
     }
-    if(req.url==="/data"){
-        fs.readFile("Hello.txt","utf-8",(errr,data)=>{
-            if(errr){
-                res.end(`Error : ${errr}`);
-                return
-            }
-            res.end(`Data : ${data}`)
-        })
+    if(req.url.startsWith("/users/") && req.method==="GET"){
+        const stringNumber = req.url.split("/")[2];
+        const id = Number(stringNumber);
+        const user = data.find(users=>users.id===id);
+        if (!user) {
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ error: "User not found" }));
+            return;
+        }
+        console.log(`User : ${user} And Id : ${id}`)
+        res.statusCode = 200;
+        res.end(JSON.stringify(user))
         return
     }
-    if(req.url==="/mohit"){
-        res.end(`Mohit's Page`)
-        return
-    }
-    res.statusCode = 404;
-    res.end(`Error`)
 })
 server.listen(3000)
